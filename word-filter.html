@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Filter App</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="bg-white p-8 rounded shadow-md w-full max-w-md">
+        <h1 class="text-2xl font-bold mb-4 text-center">Word Filter</h1>
+        <div class="flex space-x-2 mb-4 justify-center">
+            <input type="text" maxlength="5" class="letter-input border rounded px-2 py-1 w-12 text-center" id="input0" placeholder="1st">
+            <input type="text" maxlength="5" class="letter-input border rounded px-2 py-1 w-12 text-center" id="input1" placeholder="2nd">
+            <input type="text" maxlength="5" class="letter-input border rounded px-2 py-1 w-12 text-center" id="input2" placeholder="3rd">
+            <input type="text" maxlength="5" class="letter-input border rounded px-2 py-1 w-12 text-center" id="input3" placeholder="4th">
+            <input type="text" maxlength="5" class="letter-input border rounded px-2 py-1 w-12 text-center" id="input4" placeholder="5th">
+        </div>
+        <ul id="word-list" class="space-y-1 text-center"></ul>
+    </div>
+    <script>
+        // Example word list (can be replaced with a larger list)
+        const words = [
+            "about", "after", "again", "below", "could",
+            "every", "first", "found", "great", "house",
+            "large", "learn", "never", "other", "place",
+            "plant", "point", "right", "small", "sound",
+            "spell", "still", "study", "their", "there",
+            "these", "thing", "think", "three", "water",
+            "where", "which", "world", "would", "write",
+        ];
+
+        function filterWords() {
+            const filters = [];
+            for (let i = 0; i < 5; i++) {
+                filters[i] = $(`#input${i}`).val().toLowerCase();
+            }
+            const filtered = words.filter(word => {
+                if (word.length < 5) return false;
+                for (let i = 0; i < 5; i++) {
+                    if (filters[i] && !filters[i].includes(word[i])) {
+                        return false;
+                    }
+                }
+                return true;
+            });
+            const $list = $('#word-list');
+            $list.empty();
+            if (filtered.length === 0) {
+                $list.append('<li class="text-gray-400">No matches</li>');
+            } else {
+                filtered.forEach(word => {
+                    $list.append(`<li class="bg-blue-100 rounded px-2 py-1">${word}</li>`);
+                });
+            }
+        }
+
+        $(document).ready(function() {
+            $('.letter-input').on('input', filterWords);
+            filterWords(); // Initial display
+        });
+    </script>
+</body>
+</html>
